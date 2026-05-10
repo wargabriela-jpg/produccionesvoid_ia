@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Producciones Void — Estudio IA · Algarrobo</title>
+  <meta name="description" content="Producciones Void. Automatización, IA y Marketing Digital para empresas. Estudio IA · Algarrobo.">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@200;300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:      #080808;
+      --dark:     #0c0c10;
+      --panel:    #111116;
+      --border:   #1c1c24;
+      --border2:  #2a2a36;
+      --acid:     #c8ff00;
+      --acid-dim: rgba(200,255,0,.10);
+      --white:    #ededf0;
+      --muted:    #52525e;
+      --muted2:   #7a7a8a;
+      --grotesk:  'Space Grotesk', sans-serif;
+      --mono:     'DM Mono', monospace;
+      --body:     'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--ink);
+      color: var(--white);
+      font-family: var(--body);
+      overflow-x: hidden;
+      line-height: 1.6;
+      cursor: none;
+    }
+    a { color: inherit; text-decoration: none; }
+    ::-webkit-scrollbar { width: 2px; }
+    ::-webkit-scrollbar-track { background: var(--ink); }
+    ::-webkit-scrollbar-thumb { background: var(--acid); }
+
+    /* ── CURSOR ── */
+    #cursor {
+      position: fixed; width: 10px; height: 10px;
+      background: var(--acid); border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: width .15s, height .15s;
+      mix-blend-mode: difference;
+    }
+    #cursor-ring {
+      position: fixed; width: 36px; height: 36px;
+      border-radius: 50%; border: 1px solid rgba(200,255,0,.35);
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: width .25s, height .25s;
+    }
+
+    /* ── HEADER ── */
+    #site-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .7rem 6%;
+      background: rgba(8,8,8,.92);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(255,255,255,.04);
+      height: 56px;
+    }
+    .logo-wrap { display: flex; align-items: center; gap: .65rem; }
+    .logo-mark-svg { width: 26px; height: 26px; }
+    .logo-word {
+      font-family: var(--grotesk); font-weight: 600;
+      font-size: 1.05rem; letter-spacing: -.02em;
+      color: var(--white); display: flex; align-items: center;
+    }
+    .lw-o {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: .68em; height: .68em;
+      border: .1em solid var(--acid); border-radius: 50%;
+      margin: 0 .025em;
+    }
+    .lw-dot { width: .25em; height: .25em; background: var(--acid); border-radius: 50%; }
+    .lw-ai {
+      font-size: .58em; font-weight: 300; color: var(--acid);
+      letter-spacing: .04em; margin-left: .08em;
+      align-self: flex-end; padding-bottom: .08em;
+    }
+    .header-right { display: flex; align-items: center; gap: 1.2rem; }
+    .nav-links-h {
+      display: flex; gap: 2rem; list-style: none;
+      font-family: var(--mono); font-size: .62rem;
+      letter-spacing: .14em; text-transform: uppercase;
+    }
+    .nav-links-h a { color: var(--muted); transition: color .2s; }
+    .nav-links-h a:hover { color: var(--white); }
+    .nav-cta {
+      font-family: var(--mono); font-size: .65rem;
+      letter-spacing: .12em; text-transform: uppercase;
+      padding: .5rem 1.4rem;
+      border: 1px solid var(--acid); color: var(--acid);
+      border-radius: 100px;
+      transition: background .2s, color .2s; white-space: nowrap;
+    }
+    .nav-cta:hover { background: var(--acid); color: var(--ink); }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative; min-height: 100dvh;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; padding-top: 56px;
+    }
+    #hero-canvas {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; z-index: 0;
+    }
+    .scanlines {
+      position: absolute; inset: 0; z-index: 1;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 3px,
+        rgba(0,0,0,.04) 3px, rgba(0,0,0,.04) 6px
+      );
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      text-align: center; padding: 2rem;
+      max-width: 860px;
+      display: flex; flex-direction: column; align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .7rem;
+      font-family: var(--mono); font-size: .6rem;
+      letter-spacing: .28em; text-transform: uppercase;
+      color: var(--acid);
+      border: 1px solid rgba(200,255,0,.2);
+      padding: .4rem 1.2rem; margin-bottom: 2.8rem;
+      animation: fadeUp .6s ease both;
+    }
+    .badge-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--acid);
+      animation: blink 1.4s ease-in-out infinite;
+    }
+    .badge-word { transition: color .2s, text-shadow .3s; color: rgba(200,255,0,.5); }
+    .badge-word.glow {
+      color: var(--acid);
+      text-shadow: 0 0 8px rgba(200,255,0,.9), 0 0 20px rgba(200,255,0,.5);
+    }
+    @keyframes blink { 0%,100%{ opacity:1 } 50%{ opacity:.2 } }
+
+    /* Hero mark */
+    .hero-mark-wrap {
+      width: clamp(120px, 18vw, 190px);
+      height: clamp(120px, 18vw, 190px);
+      margin-bottom: 2.6rem;
+      animation: fadeUp .7s ease .08s both;
+    }
+    .hero-mark-wrap svg { width: 100%; height: 100%; }
+    .hm-outer { animation: slowSpin 60s linear infinite; transform-origin: 50px 50px; }
+    .hm-diag-path {
+      stroke-dasharray: 125; stroke-dashoffset: 125;
+      animation: drawDiag 1.2s cubic-bezier(.4,0,.2,1) .5s forwards;
+    }
+    .hm-dot { animation: dotPulse 2.5s ease-in-out infinite; transform-origin: 50px 50px; }
+    @keyframes slowSpin  { to { transform: rotate(360deg); } }
+    @keyframes drawDiag  { to { stroke-dashoffset: 0; } }
+    @keyframes dotPulse  { 0%,100%{ transform:scale(1); opacity:1 } 50%{ transform:scale(1.5); opacity:.7 } }
+
+    /* Hero wordmark */
+    .hero-wordmark {
+      font-family: var(--grotesk); font-weight: 700;
+      font-size: clamp(2.8rem, 9vw, 6.5rem);
+      letter-spacing: -.04em; line-height: 1;
+      color: var(--white); display: flex; align-items: center;
+      animation: fadeUp .9s ease .18s both;
+    }
+    .hw-o {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: .72em; height: .72em;
+      border: .06em solid var(--acid); border-radius: 50%;
+      margin: 0 .025em;
+    }
+    .hw-dot { width: .26em; height: .26em; background: var(--acid); border-radius: 50%; }
+    .hw-ai {
+      font-size: .36em; font-weight: 300; color: var(--acid);
+      letter-spacing: .06em; align-self: flex-end;
+      padding-bottom: .16em; margin-left: .1em;
+    }
+
+    .hero-tagline {
+      font-family: var(--mono); font-size: .62rem;
+      letter-spacing: .5em; text-transform: uppercase;
+      color: rgba(237,237,240,.26);
+      margin-top: 1.2rem; padding-right: .5em;
+      animation: fadeUp .9s ease .28s both;
+    }
+
+    .hero-sub {
+      margin-top: 1.8rem;
+      font-size: clamp(.9rem, 1.6vw, 1.05rem);
+      color: rgba(237,237,240,.52);
+      font-weight: 300; max-width: 580px; line-height: 1.85;
+      animation: fadeUp 1s ease .22s both;
+    }
+
+    .hero-actions {
+      margin-top: 2.8rem;
+      display: flex; gap: 1.2rem;
+      justify-content: center; flex-wrap: wrap;
+      animation: fadeUp 1s ease .36s both;
+    }
+
+    /* ── BUTTONS ── */
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: .6rem;
+      padding: 1rem 2.8rem;
+      background: var(--acid); color: var(--ink);
+      font-family: var(--mono); font-size: .82rem;
+      letter-spacing: .1em; text-transform: uppercase;
+      font-weight: 700; border-radius: 100px;
+      transition: transform .2s, box-shadow .2s;
+      box-shadow: 0 0 40px rgba(200,255,0,.25);
+      border: none; cursor: none;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 80px rgba(200,255,0,.5), 0 0 120px rgba(200,255,0,.2);
+    }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: .6rem;
+      padding: 1rem 2.8rem;
+      border: 1px solid rgba(255,255,255,.12);
+      font-family: var(--mono); font-size: .82rem;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--muted); border-radius: 100px;
+      transition: border-color .2s, color .2s, background .2s; cursor: none;
+    }
+    .btn-ghost:hover { border-color: var(--acid); color: var(--acid); background: var(--acid-dim); }
+
+    /* Hero stats */
+    .hero-stats {
+      display: flex; gap: 2.5rem; justify-content: center;
+      margin-top: 2.8rem;
+      animation: fadeUp 1s ease .5s both;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: var(--grotesk); font-weight: 700;
+      font-size: 2.1rem; color: var(--acid);
+      letter-spacing: -.03em; line-height: 1;
+    }
+    .stat-label {
+      font-family: var(--mono); font-size: .56rem;
+      letter-spacing: .18em; color: var(--muted);
+      text-transform: uppercase; margin-top: .3rem;
+    }
+    .hero-freq {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      z-index: 2; height: 80px; pointer-events: none;
+    }
+    .hero-scroll {
+      position: absolute; bottom: 2.5rem; left: 50%;
+      transform: translateX(-50%); z-index: 3;
+      font-family: var(--mono); font-size: .55rem;
+      letter-spacing: .28em; color: var(--muted);
+      text-transform: uppercase;
+      display: flex; flex-direction: column; align-items: center; gap: .6rem;
+    }
+    .scroll-line {
+      width: 1px; height: 48px;
+      background: linear-gradient(to bottom, var(--acid), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    /* ── MARQUEE ── */
+    .marquee-strip {
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      overflow: hidden; white-space: nowrap;
+      padding: .9rem 0; background: var(--dark);
+    }
+    .marquee-inner { display: inline-block; animation: marquee 28s linear infinite; }
+    .marquee-inner span {
+      font-family: var(--grotesk); font-size: .9rem; font-weight: 500;
+      letter-spacing: .18em; color: var(--muted);
+      padding: 0 2.5rem; text-transform: uppercase;
+    }
+    .marquee-inner span.hi { color: var(--acid); font-weight: 400; }
+    @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    /* ── GENERIC SECTION ── */
+    section { padding: 6rem 6%; }
+    .section-tag {
+      display: inline-block;
+      font-family: var(--mono); font-size: .6rem;
+      letter-spacing: .32em; text-transform: uppercase;
+      color: var(--acid); margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: var(--grotesk); font-weight: 700;
+      font-size: clamp(2rem, 4.5vw, 3.5rem);
+      letter-spacing: -.035em; line-height: .95;
+    }
+    .section-desc {
+      margin-top: 1rem; color: var(--muted2);
+      max-width: 520px; font-size: .95rem;
+      line-height: 1.8; font-weight: 300;
+    }
+
+    /* ── SERVICIOS INTRO (2 col) ── */
+    #servicios { background: var(--dark); border-top: 1px solid var(--border); }
+    .servicios-intro {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1px; margin-top: 3.5rem;
+      border: 1px solid var(--border);
+      max-width: 1000px;
+    }
+    .serv-col {
+      padding: 2.5rem; background: var(--panel);
+      transition: background .25s;
+    }
+    .serv-col:hover { background: #141418; }
+    .serv-col-tag {
+      font-family: var(--mono); font-size: .58rem;
+      letter-spacing: .28em; text-transform: uppercase;
+      color: var(--acid); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: .6rem;
+    }
+    .serv-col-tag::before {
+      content: ''; width: 18px; height: 1px; background: var(--acid);
+    }
+    .serv-col h3 {
+      font-family: var(--grotesk); font-weight: 600;
+      font-size: 1.3rem; letter-spacing: -.02em;
+      margin-bottom: .8rem; line-height: 1.2;
+    }
+    .serv-col p {
+      font-size: .88rem; color: var(--muted2);
+      line-height: 1.75; font-weight: 300;
+    }
+
+    /* ── SERVICE CARDS (6 grid) ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px; margin-top: 1px;
+      max-width: 1000px;
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .card {
+      background: var(--panel);
+      padding: 2rem 1.8rem;
+      border-right: 1px solid var(--border);
+      transition: background .3s;
+      position: relative; overflow: hidden;
+    }
+    .card:nth-child(3n) { border-right: none; }
+    .card::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 1px; background: transparent;
+      transition: background .3s;
+    }
+    .card:hover { background: #141418; }
+    .card:hover::after { background: rgba(200,255,0,.15); }
+
+    .card-icon {
+      width: 36px; height: 36px; margin-bottom: 1.2rem;
+    }
+    .card-num {
+      position: absolute; top: 1.5rem; right: 1.8rem;
+      font-family: var(--mono); font-size: .6rem;
+      letter-spacing: .14em; color: var(--border2);
+    }
+    .card h4 {
+      font-family: var(--grotesk); font-weight: 600;
+      font-size: 1rem; letter-spacing: -.015em;
+      margin-bottom: .6rem; line-height: 1.2;
+    }
+    .card p {
+      font-size: .82rem; color: var(--muted2);
+      line-height: 1.7; font-weight: 300;
+    }
+
+    /* ── PROCESO ── */
+    #proceso { background: var(--ink); border-top: 1px solid var(--border); }
+    .proceso-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 0; margin-top: 3.5rem;
+      border: 1px solid var(--border); max-width: 1000px;
+    }
+    .step {
+      padding: 2rem 1.8rem;
+      border-right: 1px solid var(--border);
+      transition: background .25s;
+    }
+    .step:last-child { border-right: none; }
+    .step:hover { background: var(--panel); }
+    .step-num {
+      font-family: var(--grotesk); font-weight: 700;
+      font-size: 2.8rem; color: var(--border2);
+      letter-spacing: -.04em; line-height: 1;
+      margin-bottom: .8rem; transition: color .25s;
+    }
+    .step:hover .step-num { color: var(--acid); }
+    .step-title { font-size: .9rem; font-weight: 500; margin-bottom: .4rem; }
+    .step-text { font-size: .78rem; color: var(--muted2); line-height: 1.7; font-weight: 300; }
+
+    /* ── FAQ ── */
+    #faq { background: var(--dark); border-top: 1px solid var(--border); }
+    .faq-list { margin-top: 3rem; max-width: 720px; }
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .faq-question {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 0; cursor: none;
+      font-family: var(--grotesk); font-weight: 500;
+      font-size: .95rem; letter-spacing: -.01em;
+      transition: color .2s;
+      gap: 1rem;
+    }
+    .faq-item.open .faq-question { color: var(--acid); }
+    .faq-icon {
+      flex-shrink: 0; width: 20px; height: 20px;
+      border: 1px solid var(--border2); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color .2s, transform .3s;
+    }
+    .faq-item.open .faq-icon {
+      border-color: var(--acid);
+      transform: rotate(45deg);
+    }
+    .faq-icon svg { width: 10px; height: 10px; }
+    .faq-answer {
+      max-height: 0; overflow: hidden;
+      transition: max-height .35s cubic-bezier(.4,0,.2,1), padding .35s;
+      font-size: .88rem; color: var(--muted2);
+      line-height: 1.8; font-weight: 300;
+    }
+    .faq-item.open .faq-answer {
+      max-height: 200px;
+      padding-bottom: 1.4rem;
+    }
+
+    /* ── CONTACTO ── */
+    #contacto { background: var(--ink); border-top: 1px solid var(--border); }
+    .contact-wrap {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 5rem; max-width: 1000px; align-items: start;
+      margin-top: 3rem;
+    }
+    .contact-info { padding-top: .5rem; }
+    .contact-info p {
+      font-size: .9rem; color: var(--muted2);
+      line-height: 1.8; font-weight: 300; margin-bottom: 2rem;
+    }
+    .contact-detail {
+      display: flex; flex-direction: column; gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .contact-row {
+      display: flex; align-items: center; gap: .8rem;
+      font-family: var(--mono); font-size: .7rem;
+      letter-spacing: .06em; color: var(--muted2);
+    }
+    .contact-row span.hi { color: var(--acid); }
+    .social-row {
+      display: flex; gap: 1rem; margin-top: .5rem;
+    }
+    .social-link {
+      width: 36px; height: 36px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); transition: border-color .2s, color .2s;
+    }
+    .social-link:hover { border-color: var(--acid); color: var(--acid); }
+
+    /* Form */
+    .form-field { display: flex; flex-direction: column; gap: 6px; }
+    .form-label {
+      font-family: var(--mono); font-size: .58rem;
+      letter-spacing: .2em; text-transform: uppercase; color: var(--muted);
+    }
+    .form-input {
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: 8px; padding: 11px 14px;
+      color: var(--white); font-family: var(--body);
+      font-size: 14px; outline: none;
+      transition: border-color .2s; width: 100%;
+    }
+    .form-input:focus { border-color: rgba(200,255,0,.4); }
+    .form-input::placeholder { color: var(--border2); }
+    textarea.form-input { resize: vertical; min-height: 110px; line-height: 1.6; }
+
+    /* ── CTA FINAL ── */
+    #cta-final {
+      background: var(--dark); border-top: 1px solid var(--border);
+      text-align: center; position: relative; overflow: hidden;
+    }
+    #cta-canvas {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      opacity: .18; pointer-events: none;
+    }
+    .cta-inner { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; }
+    .cta-title {
+      font-family: var(--grotesk); font-weight: 700;
+      font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+      letter-spacing: -.035em; line-height: .95; margin-bottom: 1.2rem;
+    }
+    .cta-title .alt { color: var(--acid); }
+    .cta-sub {
+      font-family: var(--mono); font-size: .82rem;
+      color: var(--muted2); letter-spacing: .05em;
+      margin-bottom: 2.8rem; line-height: 1.7;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink); border-top: 1px solid var(--border);
+      padding: 2.8rem 6%;
+    }
+    .footer-top {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; flex-wrap: wrap; gap: 2rem;
+      margin-bottom: 2.5rem;
+      padding-bottom: 2.5rem; border-bottom: 1px solid var(--border);
+    }
+    .footer-brand p {
+      font-family: var(--mono); font-size: .7rem;
+      color: var(--muted); margin-top: .8rem;
+      letter-spacing: .06em; max-width: 220px; line-height: 1.6;
+    }
+    .footer-nav { display: flex; gap: 3rem; flex-wrap: wrap; }
+    .footer-nav-col h5 {
+      font-family: var(--mono); font-size: .58rem;
+      letter-spacing: .22em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 1rem;
+    }
+    .footer-nav-col ul { list-style: none; display: flex; flex-direction: column; gap: .6rem; }
+    .footer-nav-col ul a {
+      font-family: var(--mono); font-size: .68rem;
+      letter-spacing: .08em; color: var(--muted2);
+      transition: color .2s;
+    }
+    .footer-nav-col ul a:hover { color: var(--acid); }
+    .footer-bottom {
+      display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-copy {
+      font-family: var(--mono); font-size: .58rem;
+      letter-spacing: .1em; color: var(--muted);
+    }
+    .footer-social { display: flex; gap: .8rem; }
+    .footer-social a {
+      width: 32px; height: 32px; border: 1px solid var(--border);
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; color: var(--muted);
+      transition: border-color .2s, color .2s; font-size: 12px;
+    }
+    .footer-social a:hover { border-color: var(--acid); color: var(--acid); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes scrollPulse { 0%,100%{opacity:.2} 50%{opacity:1} }
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .nav-links-h { display: none; }
+      .servicios-intro { grid-template-columns: 1fr; }
+      .cards-grid { grid-template-columns: 1fr 1fr; }
+      .cards-grid .card:nth-child(3n) { border-right: 1px solid var(--border); }
+      .cards-grid .card:nth-child(2n) { border-right: none; }
+      .contact-wrap { grid-template-columns: 1fr; gap: 3rem; }
+      .proceso-grid { grid-template-columns: 1fr 1fr; }
+      .footer-top { flex-direction: column; }
+    }
+    @media (max-width: 560px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .cards-grid .card { border-right: none !important; }
+      .proceso-grid { grid-template-columns: 1fr; }
+      .step { border-right: none; border-bottom: 1px solid var(--border); }
+      .hero-stats { gap: 1.5rem; }
+    }
+
+    /* Toast notificacion */
+    #toast {
+      position: fixed; bottom: 100px; left: 50%; z-index: 8000;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--panel); border: 1px solid rgba(200,255,0,.3);
+      color: var(--acid); font-family: var(--mono); font-size: .72rem;
+      letter-spacing: .08em; padding: .8rem 1.6rem;
+      border-radius: 100px; opacity: 0;
+      transition: opacity .3s, transform .3s;
+      pointer-events: none;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<div id="toast">✓ Mensaje enviado — te respondemos pronto</div>
+
+<!-- HEADER -->
+<header id="site-header">
+  <a href="#" class="logo-wrap">
+    <svg class="logo-mark-svg" viewBox="0 0 100 100" fill="none">
+      <circle cx="50" cy="50" r="44" stroke="rgba(237,237,240,.5)" stroke-width=".8"/>
+      <circle cx="50" cy="50" r="26" stroke="rgba(237,237,240,.3)" stroke-width=".8"/>
+      <line x1="50" y1="4"  x2="50" y2="12" stroke="rgba(237,237,240,.3)" stroke-width=".8"/>
+      <line x1="50" y1="88" x2="50" y2="96" stroke="rgba(237,237,240,.3)" stroke-width=".8"/>
+      <line x1="4"  y1="50" x2="12" y2="50" stroke="rgba(237,237,240,.3)" stroke-width=".8"/>
+      <line x1="88" y1="50" x2="96" y2="50" stroke="rgba(237,237,240,.3)" stroke-width=".8"/>
+      <line x1="12" y1="88" x2="88" y2="12" stroke="#c8ff00" stroke-width="1.6"/>
+      <circle cx="50" cy="50" r="4" fill="#c8ff00"/>
+    </svg>
+    <span class="logo-word">V<span class="lw-o"><span class="lw-dot"></span></span>id<span class="lw-ai">.ai</span></span>
+  </a>
+  <div class="header-right">
+    <ul class="nav-links-h">
+      <li><a href="#servicios">Servicios</a></li>
+      <li><a href="#proceso">Proceso</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+    <a href="#contacto" class="nav-cta">Hablemos →</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="scanlines"></div>
+  <div class="hero-content">
+
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      <span class="badge-word" id="bw-0">IA</span>
+      <span style="color:rgba(200,255,0,.3)">·</span>
+      <span class="badge-word" id="bw-1">Automatización</span>
+      <span style="color:rgba(200,255,0,.3)">·</span>
+      <span class="badge-word" id="bw-2">Marketing</span>
+      <span class="badge-dot"></span>
+    </div>
+
+    <div class="hero-mark-wrap">
+      <svg viewBox="0 0 100 100" fill="none">
+        <g class="hm-outer">
+          <circle cx="50" cy="50" r="47" stroke="rgba(237,237,240,.07)" stroke-width=".6"/>
+          <line x1="50" y1="2"  x2="50" y2="7"  stroke="rgba(237,237,240,.18)" stroke-width=".8"/>
+          <line x1="50" y1="93" x2="50" y2="98" stroke="rgba(237,237,240,.18)" stroke-width=".8"/>
+          <line x1="2"  y1="50" x2="7"  y2="50" stroke="rgba(237,237,240,.18)" stroke-width=".8"/>
+          <line x1="93" y1="50" x2="98" y2="50" stroke="rgba(237,237,240,.18)" stroke-width=".8"/>
+        </g>
+        <circle cx="50" cy="50" r="38" stroke="rgba(237,237,240,.1)"  stroke-width=".8"/>
+        <circle cx="50" cy="50" r="24" stroke="rgba(237,237,240,.28)" stroke-width="1"/>
+        <line x1="50" y1="25" x2="50" y2="29" stroke="rgba(237,237,240,.22)" stroke-width=".8"/>
+        <line x1="50" y1="71" x2="50" y2="75" stroke="rgba(237,237,240,.22)" stroke-width=".8"/>
+        <line x1="25" y1="50" x2="29" y2="50" stroke="rgba(237,237,240,.22)" stroke-width=".8"/>
+        <line x1="71" y1="50" x2="75" y2="50" stroke="rgba(237,237,240,.22)" stroke-width=".8"/>
+        <line class="hm-diag-path" x1="10" y1="90" x2="90" y2="10" stroke="#c8ff00" stroke-width="1.6" stroke-linecap="round"/>
+        <circle class="hm-dot" cx="50" cy="50" r="4.5" fill="#c8ff00"/>
+        <circle cx="50" cy="50" r="1.8" fill="#080808"/>
+      </svg>
+    </div>
+
+    <div class="hero-wordmark">V<span class="hw-o"><span class="hw-dot"></span></span>id<span class="hw-ai">.ai</span></div>
+    <div class="hero-tagline">Producciones &nbsp;·&nbsp; Estudio IA &nbsp;·&nbsp; Algarrobo</div>
+
+    <p class="hero-sub">El mayor activo de cualquier empresa es la integración de Inteligencia Artificial y Marketing Digital. Nosotros hacemos que ese salto sea posible.</p>
+
+    <div class="hero-actions">
+      <a href="#contacto" class="btn-primary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        Hablemos
+      </a>
+      <a href="#servicios" class="btn-ghost">Ver servicios</a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">6</div>
+        <div class="stat-label">Servicios</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">24H</div>
+        <div class="stat-label">Primer contacto</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Personalizado</div>
+      </div>
+    </div>
+
+  </div>
+  <svg class="hero-freq" viewBox="0 0 1440 80" preserveAspectRatio="none">
+    <path id="freq-path" fill="none" stroke="rgba(200,255,0,.18)" stroke-width="1.5"/>
+  </svg>
+  <div class="hero-scroll"><div class="scroll-line"></div><span>scroll</span></div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-strip">
+  <div class="marquee-inner">
+    <span>INTELIGENCIA ARTIFICIAL</span><span class="hi">◎</span>
+    <span>AUTOMATIZACIÓN</span><span class="hi">◎</span>
+    <span>MARKETING DIGITAL</span><span class="hi">◎</span>
+    <span>PÁGINAS WEB</span><span class="hi">◎</span>
+    <span>CHATBOTS Y AGENTES</span><span class="hi">◎</span>
+    <span>EMBUDOS DE VENTAS</span><span class="hi">◎</span>
+    <span>CONSULTORÍA EMPRESARIAL</span><span class="hi">◎</span>
+    <span>INTELIGENCIA ARTIFICIAL</span><span class="hi">◎</span>
+    <span>AUTOMATIZACIÓN</span><span class="hi">◎</span>
+    <span>MARKETING DIGITAL</span><span class="hi">◎</span>
+    <span>PÁGINAS WEB</span><span class="hi">◎</span>
+    <span>CHATBOTS Y AGENTES</span><span class="hi">◎</span>
+    <span>EMBUDOS DE VENTAS</span><span class="hi">◎</span>
+    <span>CONSULTORÍA EMPRESARIAL</span><span class="hi">◎</span>
+  </div>
+</div>
+
+<!-- SERVICIOS — intro 2 col + 6 cards -->
+<section id="servicios">
+  <div class="section-tag">— Qué hacemos</div>
+  <h2 class="section-title reveal">Soluciones que mueven<br>a tu empresa</h2>
+  <p class="section-desc reveal">Integramos IA y Marketing Digital para reducir costos operativos, automatizar procesos y escalar resultados.</p>
+
+  <!-- 2 columnas intro -->
+  <div class="servicios-intro reveal" style="margin-bottom:1px;">
+    <div class="serv-col">
+      <div class="serv-col-tag">Inteligencia Artificial</div>
+      <h3>Automatización e IA</h3>
+      <p>Integramos sistemas que reducen costos operativos y tiempo de ejecución en todos los departamentos. Desde análisis de datos hasta agentes autónomos que toman decisiones.</p>
+    </div>
+    <div class="serv-col" style="border-left:1px solid var(--border);">
+      <div class="serv-col-tag">Marketing Digital</div>
+      <h3>Estrategia con IA</h3>
+      <p>Desarrollamos estrategias con IA que incluyen embudos de ventas, publicidad digital y gestión del equipo comercial potenciada por datos y automatización.</p>
+    </div>
+  </div>
+
+  <!-- 6 cards -->
+  <div class="cards-grid">
+
+    <div class="card reveal">
+      <span class="card-num">01</span>
+      <svg class="card-icon" viewBox="0 0 36 36" fill="none">
+        <circle cx="18" cy="18" r="16" stroke="#c8ff00" stroke-width="1"/>
+        <circle cx="18" cy="18" r="7"  stroke="#c8ff00" stroke-width="1"/>
+        <line x1="18" y1="2"  x2="18" y2="8"  stroke="#c8ff00" stroke-width="1"/>
+        <line x1="18" y1="28" x2="18" y2="34" stroke="#c8ff00" stroke-width="1"/>
+        <line x1="2"  y1="18" x2="8"  y2="18" stroke="#c8ff00" stroke-width="1"/>
+        <line x1="28" y1="18" x2="34" y2="18" stroke="#c8ff00" stroke-width="1"/>
+      </svg>
+      <h4>Automatización de Procesos</h4>
+      <p>Optimización profunda de operaciones para reducir costos y tiempo en cada departamento de tu empresa.</p>
+    </div>
+
+    <div class="card reveal" style="border-left:1px solid var(--border);">
+      <span class="card-num">02</span>
+      <svg class="card-icon" viewBox="0 0 36 36" fill="none">
+        <rect x="3" y="8" width="22" height="16" rx="3" stroke="#c8ff00" stroke-width="1"/>
+        <path d="M25 14l8-4v16l-8-4" stroke="#c8ff00" stroke-width="1" stroke-linejoin="round"/>
+        <circle cx="10" cy="16" r="2" fill="#c8ff00"/>
+        <line x1="15" y1="14" x2="21" y2="14" stroke="#c8ff00" stroke-width="1"/>
+        <line x1="15" y1="18" x2="19" y2="18" stroke="#c8ff00" stroke-width="1"/>
+      </svg>
+      <h4>Chatbots y Agentes IA</h4>
+      <p>Sistemas de decisión autónoma que atienden, califican y convierten leads sin intervención humana continua.</p>
+    </div>
+
+    <div class="card reveal" style="border-left:1px solid var(--border);">
+      <span class="card-num">03</span>
+      <svg class="card-icon" viewBox="0 0 36 36" fill="none">
+        <line x1="4"  y1="32" x2="4"  y2="4"  stroke="#c8ff00" stroke-width="1"/>
+        <line x1="4"  y1="32" x2="32" y2="32" stroke="#c8ff00" stroke-width="1"/>
+        <polyline points="8,24 14,14 20,18 28,8" stroke="#c8ff00" stroke-width="1" stroke-linejoin="round"/>
+        <circle cx="28" cy="8" r="2.5" fill="#c8ff00"/>
+      </svg>
+      <h4>Desarrollo Estratégico</h4>
+      <p>Análisis de arquitectura empresarial para identificar oportunidades de crecimiento y escalabilidad sostenible.</p>
+    </div>
+
+    <div class="card reveal">
+      <span class="card-num">04</span>
+      <svg class="card-icon" viewBox="0 0 36 36" fill="none">
+        <circle cx="18" cy="18" r="15" stroke="#c8ff00" stroke-width="1"/>
+        <circle cx="18" cy="18" r="8"  stroke="#c8ff00" stroke-width="1" stroke-dasharray="2 2"/>
+        <line x1="3"  y1="18" x2="10" y2="18" stroke="#c8ff00" stroke-width="1"/>
+        <circle cx="18" cy="18" r="2.5" fill="#c8ff00"/>
+      </svg>
+      <h4>Publicidad Digital</h4>
+      <p>Captación de clientes mediante campañas de alto rendimiento integradas con flujos de conversión automatizados.</p>
+    </div>
+
+    <div class="card reveal" style="border-left:1px solid var(--border);">
+      <span class="card-num">05</span>
+      <svg class="card-icon" viewBox="0 0 36 36" fill="none">
+        <path d="M6 6h24l-4 8H10L6 6z"  stroke="#c8ff00" stroke-width="1" stroke-linejoin="round"/>
+        <path d="M10 14h16l-3 8H13l-3-8z" stroke="#c8ff00" stroke-width="1" stroke-linejoin="round"/>
+        <path d="M13 22h10l-2 8h-6l-2-8z" stroke="#c8ff00" stroke-width="1" stroke-linejoin="round"/>
+        <circle cx="18" cy="32" r="1.5" fill="#c8ff00"/>
+      </svg>
+      <h4>Embudos de Ventas</h4>
+      <p>Diseño y optimización del recorrido del comprador: desde el primer contacto hasta la conversión y retención.</p>
+    </div>
+
+    <div class="card reveal" style="border-left:1px solid var(--border);">
+      <span class="card-num">06</span>
+      <svg class="card-icon" viewBox="0 0 36 36" fill="none">
+        <rect x="4" y="4" width="28" height="28" rx="2" stroke="#c8ff00" stroke-width="1"/>
+        <line x1="4" y1="12" x2="32" y2="12" stroke="#c8ff00" stroke-width="1"/>
+        <line x1="12" y1="4" x2="12" y2="12" stroke="#c8ff00" stroke-width="1"/>
+        <line x1="10" y1="20" x2="26" y2="20" stroke="#c8ff00" stroke-width=".8"/>
+        <line x1="10" y1="25" x2="22" y2="25" stroke="#c8ff00" stroke-width=".8"/>
+      </svg>
+      <h4>Consultoría Empresarial</h4>
+      <p>Evaluaciones de viabilidad de proyectos de IA, análisis de ROI y hoja de ruta de implementación por etapas.</p>
+    </div>
+
+    <!-- Card 07 — full width -->
+    <div class="card reveal" style="grid-column:1/-1;border-left:none;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:2rem;padding:2rem 2.4rem;">
+      <svg viewBox="0 0 36 36" fill="none" style="width:40px;height:40px;flex-shrink:0;">
+        <rect x="2" y="5" width="32" height="22" rx="2" stroke="#c8ff00" stroke-width="1"/>
+        <line x1="2"  y1="12" x2="34" y2="12" stroke="#c8ff00" stroke-width="1"/>
+        <circle cx="6"  cy="8.5" r="1.2" fill="#c8ff00"/>
+        <circle cx="10" cy="8.5" r="1.2" fill="#c8ff00"/>
+        <circle cx="14" cy="8.5" r="1.2" stroke="#c8ff00" stroke-width=".8"/>
+        <line x1="12" y1="27" x2="24" y2="27" stroke="#c8ff00" stroke-width="1"/>
+        <line x1="18" y1="27" x2="18" y2="31" stroke="#c8ff00" stroke-width="1"/>
+        <line x1="12" y1="31" x2="24" y2="31" stroke="#c8ff00" stroke-width="1"/>
+        <line x1="8"  y1="17" x2="18" y2="17" stroke="#c8ff00" stroke-width=".8"/>
+        <line x1="8"  y1="21" x2="14" y2="21" stroke="#c8ff00" stroke-width=".8"/>
+        <rect x="22" y="15" width="8" height="8" rx="1" stroke="#c8ff00" stroke-width=".8"/>
+      </svg>
+      <div>
+        <div style="font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.24em;text-transform:uppercase;color:var(--acid);margin-bottom:.5rem;">07 · Nuevo servicio</div>
+        <h4 style="font-size:1.1rem;margin-bottom:.4rem;">Diseño y Desarrollo de Páginas Web</h4>
+        <p style="max-width:600px;">Creamos sitios web a medida — desde landing pages de alta conversión hasta plataformas completas. Diseño que comunica tu marca, integrado con automatizaciones y estrategia digital desde el primer día.</p>
+      </div>
+      <a href="#contacto" class="btn-ghost" style="white-space:nowrap;flex-shrink:0;">Consultar →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROCESO -->
+<section id="proceso">
+  <div class="section-tag">— Proceso</div>
+  <h2 class="section-title reveal">Cuatro pasos.<br>Resultados reales.</h2>
+  <p class="section-desc reveal">Del primer contacto al plan de acción en menos de 72 horas.</p>
+
+  <div class="proceso-grid">
+    <div class="step reveal">
+      <div class="step-num">01</div>
+      <div class="step-title">Primer contacto</div>
+      <div class="step-text">Nos escribís y dentro de las 24hs te respondemos para conocer tu empresa, tus objetivos y los desafíos que querés resolver.</div>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">02</div>
+      <div class="step-title">Diagnóstico</div>
+      <div class="step-text">Analizamos tus procesos actuales con IA para identificar oportunidades de automatización, eficiencia y crecimiento.</div>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">03</div>
+      <div class="step-title">Propuesta</div>
+      <div class="step-text">Te entregamos un plan de acción claro: qué implementar, con qué herramientas, en qué orden y con qué retorno esperado.</div>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">04</div>
+      <div class="step-title">Implementación</div>
+      <div class="step-text">Acompañamos la ejecución completa. Tu equipo opera más rápido con menos fricción desde el primer día.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-tag">— Preguntas frecuentes</div>
+  <h2 class="section-title reveal">Lo que más<br>nos preguntan</h2>
+
+  <div class="faq-list reveal">
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        ¿Cuánto tiempo lleva implementar una solución de IA?
+        <span class="faq-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </span>
+      </div>
+      <div class="faq-answer">Depende del alcance del proyecto. Una automatización puntual puede estar operativa en 1 a 3 semanas. Una transformación más amplia puede llevar entre 1 y 6 meses, con resultados intermedios desde el primer mes.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        ¿Necesito conocimientos técnicos para trabajar con ustedes?
+        <span class="faq-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </span>
+      </div>
+      <div class="faq-answer">Para nada. Nos encargamos de toda la parte técnica. Vos solo necesitás conocer tu negocio: cómo funciona, qué querés mejorar y cuáles son tus objetivos.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        ¿Trabajan con empresas de cualquier tamaño?
+        <span class="faq-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </span>
+      </div>
+      <div class="faq-answer">Sí. Trabajamos con PyMEs, emprendimientos y empresas medianas. Cada propuesta se adapta al tamaño, presupuesto y madurez tecnológica del cliente.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        ¿Cuánto cuesta empezar?
+        <span class="faq-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </span>
+      </div>
+      <div class="faq-answer">El primer contacto y el diagnóstico inicial son sin costo. Una vez que entendemos tu situación, te presentamos una propuesta con inversión clara y retorno estimado.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        ¿En cuánto tiempo me responden tras contactarlos?
+        <span class="faq-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </span>
+      </div>
+      <div class="faq-answer">El primer contacto es dentro de las 24hs hábiles. En la mayoría de los casos respondemos en el mismo día.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        ¿Trabajan de forma remota o presencial?
+        <span class="faq-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </span>
+      </div>
+      <div class="faq-answer">Principalmente de forma remota, lo que nos permite trabajar con clientes de todo el mundo. Para proyectos en la zona de Algarrobo también podemos coordinar reuniones presenciales.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto">
+  <div class="section-tag">— Hablemos</div>
+  <h2 class="section-title reveal">¿Listo para dar<br>el siguiente paso?</h2>
+
+  <div class="contact-wrap">
+    <div class="contact-info reveal">
+      <p>Contanos sobre tu empresa y lo que querés lograr. En menos de 24 horas te respondemos con una primera evaluación sin costo.</p>
+      <div class="contact-detail">
+        <div class="contact-row">
+          <span class="hi">◎</span>
+          <span>produccionesvoid@gmail.com</span>
+        </div>
+        <div class="contact-row">
+          <span class="hi">◎</span>
+          <span>Algarrobo, Chile</span>
+        </div>
+        <div class="contact-row">
+          <span class="hi">◎</span>
+          <span>Respuesta en menos de 24hs hábiles</span>
+        </div>
+      </div>
+      <div class="social-row">
+        <a href="#" class="social-link" aria-label="Instagram">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor"/></svg>
+        </a>
+        <a href="#" class="social-link" aria-label="LinkedIn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a href="#" class="social-link" aria-label="YouTube">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.4a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <form id="contact-form" novalidate>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;" class="contact-grid2">
+        <div class="form-field">
+          <label class="form-label">Nombre *</label>
+          <input class="form-input" type="text" name="nombre" placeholder="Tu nombre" required>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Email *</label>
+          <input class="form-input" type="email" name="email" placeholder="tu@email.com" required>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;" class="contact-grid2">
+        <div class="form-field">
+          <label class="form-label">Empresa</label>
+          <input class="form-input" type="text" name="empresa" placeholder="Tu empresa">
+        </div>
+        <div class="form-field">
+          <label class="form-label">Servicio de interés</label>
+          <select class="form-input" name="servicio" style="cursor:none;">
+            <option value="" style="background:#111116">Seleccioná uno</option>
+            <option value="automatizacion" style="background:#111116">Automatización de Procesos</option>
+            <option value="chatbots" style="background:#111116">Chatbots y Agentes IA</option>
+            <option value="estrategia" style="background:#111116">Desarrollo Estratégico</option>
+            <option value="publicidad" style="background:#111116">Publicidad Digital</option>
+            <option value="embudos" style="background:#111116">Embudos de Ventas</option>
+            <option value="consultoria" style="background:#111116">Consultoría Empresarial</option>
+            <option value="web" style="background:#111116">Diseño y Desarrollo Web</option>
+            <option value="otros" style="background:#111116">Otros / No sé aún</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-field" style="margin-bottom:18px;">
+        <label class="form-label">Mensaje *</label>
+        <textarea class="form-input" name="mensaje" placeholder="Contanos brevemente sobre tu empresa y qué querés lograr..." required></textarea>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <p style="font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:.06em;">
+          Sin compromiso · Diagnóstico gratuito
+        </p>
+        <button type="submit" id="submit-btn" class="btn-primary">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Enviar mensaje
+        </button>
+      </div>
+      <style>@media (max-width:520px){.contact-grid2{grid-template-columns:1fr!important}}</style>
+    </form>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section id="cta-final">
+  <canvas id="cta-canvas"></canvas>
+  <div class="cta-inner">
+    <div class="section-tag">— Empecemos</div>
+    <h2 class="cta-title reveal">Tu empresa merece<br>operar con <span class="alt">IA real</span></h2>
+    <p class="cta-sub reveal">
+      Un primer diagnóstico gratuito.<br>
+      Una conversación que puede cambiar cómo operás.
+    </p>
+    <div style="display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;" class="reveal">
+      <a href="#contacto" class="btn-primary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        Hablemos
+      </a>
+    </div>
+    <p style="margin-top:1.5rem;font-size:.68rem;color:var(--muted);font-family:var(--mono);letter-spacing:.06em;">
+      Sin compromiso · Diagnóstico gratuito · Respondemos en 24hs
+    </p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#" class="logo-wrap">
+        <svg style="width:22px;height:22px;" viewBox="0 0 100 100" fill="none">
+          <circle cx="50" cy="50" r="44" stroke="rgba(237,237,240,.4)" stroke-width=".9"/>
+          <circle cx="50" cy="50" r="26" stroke="rgba(237,237,240,.25)" stroke-width=".9"/>
+          <line x1="12" y1="88" x2="88" y2="12" stroke="#c8ff00" stroke-width="1.8"/>
+          <circle cx="50" cy="50" r="4" fill="#c8ff00"/>
+        </svg>
+        <span class="logo-word" style="font-size:.9rem;">V<span class="lw-o"><span class="lw-dot"></span></span>id<span class="lw-ai">.ai</span></span>
+      </a>
+      <p>Estudio IA · Algarrobo<br>Automatización y Marketing Digital</p>
+    </div>
+    <div class="footer-nav">
+      <div class="footer-nav-col">
+        <h5>Servicios</h5>
+        <ul>
+          <li><a href="#servicios">Automatización</a></li>
+          <li><a href="#servicios">Chatbots y Agentes</a></li>
+          <li><a href="#servicios">Estrategia</a></li>
+          <li><a href="#servicios">Publicidad Digital</a></li>
+        </ul>
+      </div>
+      <div class="footer-nav-col">
+        <h5>Empresa</h5>
+        <ul>
+          <li><a href="#proceso">Proceso</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 Producciones Void · Algarrobo</div>
+    <div class="footer-social">
+      <a href="#" aria-label="Instagram">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor"/></svg>
+      </a>
+      <a href="#" aria-label="LinkedIn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      </a>
+      <a href="#" aria-label="YouTube">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.4a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── CURSOR ── */
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx=0, my=0, rx=0, ry=0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cur.style.left = mx+'px'; cur.style.top = my+'px';
+});
+(function animRing(){
+  rx += (mx-rx)*.1; ry += (my-ry)*.1;
+  ring.style.left = rx+'px'; ring.style.top = ry+'px';
+  requestAnimationFrame(animRing);
+})();
+document.querySelectorAll('a,button,.card,.step,.faq-question').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='20px';cur.style.height='20px';});
+  el.addEventListener('mouseleave',()=>{cur.style.width='10px';cur.style.height='10px';});
+});
+
+/* ── REVEAL ── */
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* ── BADGE GLOW ── */
+const bwEls = document.querySelectorAll('.badge-word');
+let bwIdx=0;
+function cycleBadge(){
+  bwEls.forEach(b=>b.classList.remove('glow'));
+  bwEls[bwIdx].classList.add('glow');
+  bwIdx=(bwIdx+1)%bwEls.length;
+}
+cycleBadge(); setInterval(cycleBadge,1400);
+
+/* ── FAQ ACCORDION ── */
+function toggleFaq(el){
+  const item = el.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i=>i.classList.remove('open'));
+  if(!isOpen) item.classList.add('open');
+}
+
+/* ── CONTACT FORM + LEADS DB ── */
+const LEADS_KEY = 'pvoid_leads';
+
+function getLeads(){ try{ return JSON.parse(localStorage.getItem(LEADS_KEY)||'[]'); }catch(e){ return []; } }
+function saveLeads(leads){ localStorage.setItem(LEADS_KEY, JSON.stringify(leads)); }
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 4000);
+}
+
+document.getElementById('contact-form').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const form = e.target;
+  const btn = document.getElementById('submit-btn');
+
+  const data = {
+    id: Date.now(),
+    fecha: new Date().toISOString(),
+    nombre:  form.nombre.value.trim(),
+    email:   form.email.value.trim(),
+    empresa: form.empresa.value.trim(),
+    servicio: form.servicio.value,
+    mensaje: form.mensaje.value.trim(),
+    estado: 'nuevo'
+  };
+
+  if(!data.nombre || !data.email || !data.mensaje){
+    showToast('✕  Completá los campos requeridos');
+    return;
+  }
+
+  btn.textContent = 'Enviando...';
+  btn.style.opacity='.6';
+  btn.disabled=true;
+
+  // 1. Guardar en localStorage
+  const leads = getLeads();
+  leads.unshift(data);
+  saveLeads(leads);
+
+  // 2. Intentar enviar a Formspree (sin bloquear si falla)
+  try {
+    const fd = new FormData();
+    Object.entries(data).forEach(([k,v])=>fd.append(k,v));
+    fd.append('_subject','Nuevo lead — Producciones Void');
+    await fetch('https://formspree.io/f/xlgzbddp',{
+      method:'POST', body:fd, headers:{Accept:'application/json'}
+    });
+  } catch(err){ /* guardado localmente igual */ }
+
+  form.reset();
+  showToast('✓  Mensaje recibido — te respondemos pronto');
+  btn.textContent='Enviar mensaje';
+  btn.style.opacity='1';
+  btn.disabled=false;
+});
+
+/* ── HERO CANVAS ── */
+(function(){
+  const canvas = document.getElementById('hero-canvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W,H,mouseX=-9999,mouseY=-9999,t=0;
+
+  canvas.addEventListener('mousemove',e=>{
+    const r=canvas.getBoundingClientRect();
+    mouseX=e.clientX-r.left; mouseY=e.clientY-r.top;
+  });
+  canvas.addEventListener('mouseleave',()=>{mouseX=-9999;mouseY=-9999;});
+
+  function resize(){ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; }
+  resize(); window.addEventListener('resize',resize);
+
+  function loop(){
+    ctx.clearRect(0,0,W,H);
+    const cx=W/2, cy=H/2;
+    for(let i=1;i<=7;i++){
+      const r=(i/7)*Math.min(W,H)*.52+Math.sin(t*.55+i*.8)*5;
+      ctx.beginPath();
+      ctx.arc(cx,cy,r,0,Math.PI*2);
+      ctx.strokeStyle=`rgba(200,255,0,${.012+.008*Math.sin(t*.4+i)})`;
+      ctx.lineWidth=.7; ctx.stroke();
+    }
+    ctx.beginPath();
+    ctx.moveTo(cx-Math.min(W,H)*.28,cy+Math.min(W,H)*.28);
+    ctx.lineTo(cx+Math.min(W,H)*.28,cy-Math.min(W,H)*.28);
+    ctx.strokeStyle='rgba(200,255,0,.035)'; ctx.lineWidth=1; ctx.stroke();
+    if(mouseX>0&&mouseX<W){
+      ctx.beginPath(); ctx.arc(mouseX,mouseY,80,0,Math.PI*2);
+      ctx.strokeStyle='rgba(200,255,0,.04)'; ctx.lineWidth=1; ctx.stroke();
+    }
+    t+=.016; requestAnimationFrame(loop);
+  }
+  loop();
+
+  const fp=document.getElementById('freq-path');
+  function animFreq(){
+    const pts=[];
+    for(let i=0;i<=100;i++){
+      const x=i/100*1440;
+      const y=40+Math.sin(i*.18+t)*11+Math.sin(i*.07+t*1.3)*6+Math.sin(i*.33+t*.7)*3;
+      pts.push(i===0?`M${x},${y}`:`L${x},${y}`);
+    }
+    if(fp) fp.setAttribute('d',pts.join(' '));
+    requestAnimationFrame(animFreq);
+  }
+  animFreq();
+})();
+
+/* ── CTA CANVAS ── */
+(function(){
+  const C=document.getElementById('cta-canvas');
+  if(!C) return;
+  const ctx=C.getContext('2d');
+  let W,H,t=0;
+  function resize(){W=C.width=C.offsetWidth;H=C.height=C.offsetHeight;}
+  resize(); new ResizeObserver(resize).observe(C);
+  function draw(){
+    t+=.005;
+    ctx.fillStyle='rgba(12,12,16,.12)'; ctx.fillRect(0,0,W,H);
+    for(let i=0;i<12;i++){
+      const r=(i/12)*Math.min(W,H)*.7+Math.sin(t*.4+i)*14;
+      ctx.beginPath(); ctx.arc(W*.5,H*.5,Math.max(2,r),0,Math.PI*2);
+      ctx.strokeStyle=`rgba(200,255,0,${.035+.025*Math.sin(t+i)})`;
+      ctx.lineWidth=.8; ctx.stroke();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+
+<!-- ── VOID BOT ── -->
+<style>
+  #vbot-toggle {
+    position:fixed;bottom:28px;right:28px;z-index:5000;
+    width:56px;height:56px;background:var(--acid);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    cursor:none;border:none;
+    box-shadow:0 0 0 0 rgba(200,255,0,.4);
+    animation:botPulse 2.8s ease-in-out infinite;
+    transition:transform .2s;
+  }
+  #vbot-toggle:hover{transform:scale(1.1);}
+  @keyframes botPulse{0%,100%{box-shadow:0 0 0 0 rgba(200,255,0,.35);}50%{box-shadow:0 0 0 14px rgba(200,255,0,0);}}
+
+  #vbot-window {
+    position:fixed;bottom:96px;right:28px;z-index:4999;width:340px;
+    background:#0e0e12;border:1px solid #2a2a36;border-radius:16px;
+    display:flex;flex-direction:column;overflow:hidden;
+    box-shadow:0 24px 64px rgba(0,0,0,.6);
+    transform:translateY(16px) scale(.96);opacity:0;pointer-events:none;
+    transition:transform .25s cubic-bezier(.34,1.3,.64,1),opacity .2s;
+  }
+  #vbot-window.open{transform:translateY(0) scale(1);opacity:1;pointer-events:all;}
+  .vbot-header{background:#111118;border-bottom:1px solid #1c1c24;padding:13px 16px;display:flex;align-items:center;gap:10px;}
+  .vbot-avatar{width:32px;height:32px;flex-shrink:0;}
+  .vbot-name{font-family:var(--grotesk);font-weight:600;font-size:13px;color:#ededf0;display:flex;align-items:center;}
+  .vbot-name .vn-o{display:inline-flex;align-items:center;justify-content:center;width:.7em;height:.7em;border:1.5px solid var(--acid);border-radius:50%;margin:0 .02em;}
+  .vbot-name .vn-dot{width:.24em;height:.24em;background:var(--acid);border-radius:50%;}
+  .vbot-status{font-family:var(--mono);font-size:10px;color:var(--acid);letter-spacing:.08em;margin-left:auto;display:flex;align-items:center;gap:5px;}
+  .vbot-status::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--acid);animation:blink 1.4s ease-in-out infinite;}
+  .vbot-close{background:none;border:none;color:#52525e;cursor:none;font-size:16px;margin-left:8px;transition:color .2s;padding:0;line-height:1;}
+  .vbot-close:hover{color:#ededf0;}
+  .vbot-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;max-height:320px;scrollbar-width:thin;scrollbar-color:#2a2a36 transparent;}
+  .vbot-msg{max-width:88%;font-size:13px;line-height:1.6;padding:10px 13px;border-radius:12px;animation:msgIn .2s ease both;}
+  @keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+  .vbot-msg.bot{background:#1a1a22;border:1px solid #2a2a36;color:#ccc;font-family:var(--body);align-self:flex-start;border-bottom-left-radius:4px;}
+  .vbot-msg.user{background:var(--acid);color:#000;font-family:var(--body);font-weight:500;align-self:flex-end;border-bottom-right-radius:4px;}
+  .vbot-chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 12px;}
+  .vbot-chip{font-family:var(--mono);font-size:11px;letter-spacing:.06em;padding:5px 12px;border:1px solid #2a2a36;border-radius:100px;color:#7a7a8a;background:transparent;cursor:none;transition:border-color .2s,color .2s,background .2s;white-space:nowrap;}
+  .vbot-chip:hover{border-color:var(--acid);color:var(--acid);background:rgba(200,255,0,.06);}
+  .vbot-input-row{border-top:1px solid #1c1c24;padding:10px 12px;display:flex;gap:8px;align-items:center;}
+  #vbot-input{flex:1;background:#141418;border:1px solid #2a2a36;border-radius:8px;padding:8px 12px;color:#ededf0;font-family:var(--body);font-size:13px;outline:none;transition:border-color .2s;cursor:text;}
+  #vbot-input:focus{border-color:rgba(200,255,0,.4);}
+  #vbot-input::placeholder{color:#3a3a4a;}
+  #vbot-send{width:34px;height:34px;background:var(--acid);border:none;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:none;flex-shrink:0;transition:opacity .2s;}
+  #vbot-send:hover{opacity:.85;}
+  @media(max-width:400px){#vbot-window{width:calc(100vw - 32px);right:16px;}#vbot-toggle{right:16px;bottom:16px;}}
+</style>
+
+<button id="vbot-toggle" onclick="toggleVBot()" aria-label="Abrir Void Bot">
+  <svg id="vbot-icon-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+  <svg id="vbot-icon-close" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" style="display:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+</button>
+
+<div id="vbot-window">
+  <div class="vbot-header">
+    <svg class="vbot-avatar" viewBox="0 0 100 100" fill="none">
+      <circle cx="50" cy="50" r="44" stroke="rgba(237,237,240,.4)" stroke-width="1.2"/>
+      <circle cx="50" cy="50" r="26" stroke="rgba(237,237,240,.25)" stroke-width="1.2"/>
+      <line x1="12" y1="88" x2="88" y2="12" stroke="#c8ff00" stroke-width="2.5"/>
+      <circle cx="50" cy="50" r="6" fill="#c8ff00"/>
+      <circle cx="50" cy="50" r="2.5" fill="#0e0e12"/>
+    </svg>
+    <div>
+      <div class="vbot-name">V<span class="vn-o"><span class="vn-dot"></span></span>id BOT</div>
+    </div>
+    <div class="vbot-status">online</div>
+    <button class="vbot-close" onclick="toggleVBot()">✕</button>
+  </div>
+  <div class="vbot-messages" id="vbot-messages"></div>
+  <div class="vbot-chips" id="vbot-chips"></div>
+  <div class="vbot-input-row">
+    <input type="text" id="vbot-input" placeholder="Escribí tu pregunta..." autocomplete="off"
+      onkeydown="if(event.key==='Enter') sendVMsg()">
+    <button id="vbot-send" onclick="sendVMsg()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+const VRESPONSES=[
+  {keys:['hola','buenas','hey','hi','buen dia','buenas tardes','buenas noches'],
+   reply:'¡Hola! Soy Void BOT 👋 Estoy aquí para responderte dudas sobre Producciones Void, nuestros servicios y cómo podemos ayudar a tu empresa. ¿Por dónde arrancamos?',
+   chips:['¿Qué es Producciones Void?','¿Qué servicios ofrecen?','¿Cuánto cuesta?','Quiero hablar con alguien']},
+  {keys:['que es','qué es','producciones void','void','quienes son','de que se trata'],
+   reply:'Producciones Void es un estudio de IA con base en Algarrobo. Integramos Inteligencia Artificial y Marketing Digital para ayudar a empresas a automatizar procesos, reducir costos y escalar sus resultados.',
+   chips:['¿Qué servicios ofrecen?','¿Cómo funciona?','¿Cuánto cuesta?']},
+  {keys:['servicios','que hacen','qué hacen','ofrecen','ofrecés'],
+   reply:'Ofrecemos 6 servicios:\n\n① Automatización de Procesos\n② Chatbots y Agentes IA\n③ Desarrollo Estratégico\n④ Publicidad Digital\n⑤ Embudos de Ventas\n⑥ Consultoría Empresarial\n\n¿Te interesa alguno en particular?',
+   chips:['Automatización','Chatbots y Agentes','Marketing Digital','Quiero hablar con alguien']},
+  {keys:['automatizacion','automatización','automatizar','procesos'],
+   reply:'La automatización de procesos permite reducir tareas manuales y operativas usando IA. Analizamos tu flujo de trabajo y diseñamos sistemas que hacen el trabajo pesado por vos.',
+   chips:['¿Cómo empezamos?','¿Cuánto cuesta?','Ver todos los servicios']},
+  {keys:['chatbot','chatbots','agente','agentes','bot'],
+   reply:'Diseñamos chatbots y agentes IA que atienden clientes, califican leads y responden consultas de forma autónoma — integrados a WhatsApp, web, Instagram y más.',
+   chips:['¿Cómo empezamos?','¿Cuánto cuesta?','Ver todos los servicios']},
+  {keys:['marketing','publicidad','funnels','embudo','embudos','ventas'],
+   reply:'Desarrollamos estrategias de marketing potenciadas por IA: embudos de conversión, campañas de publicidad digital y sistemas que llevan prospectos hasta la venta de forma automatizada.',
+   chips:['¿Cómo empezamos?','¿Cuánto cuesta?','Ver todos los servicios']},
+  {keys:['costo','precio','cuanto cuesta','cuánto cuesta','valor','tarifa','cobran','gratis','gratuito'],
+   reply:'El primer diagnóstico es sin costo. Una vez que entendemos tu situación, te presentamos una propuesta con inversión clara y retorno estimado. Sin sorpresas ni letra chica.',
+   chips:['Quiero el diagnóstico gratuito','¿Cómo empezamos?','¿Cuánto tiempo tarda?']},
+  {keys:['tiempo','cuanto tarda','cuánto tarda','cuando','cuándo','rapido','rápido','demora'],
+   reply:'El primer contacto es dentro de las 24hs. Una automatización puntual puede estar lista en 1-3 semanas; proyectos más amplios entre 1 y 6 meses, con resultados visibles desde el primer mes.',
+   chips:['Quiero empezar','¿Cuánto cuesta?','Ver todos los servicios']},
+  {keys:['empezar','comenzar','iniciar','contacto','hablar','hablar con alguien','diagnostico','diagnóstico','quiero'],
+   reply:'¡Perfecto! Lo más fácil es completar el formulario de contacto en la página. En menos de 24hs un humano de nuestro equipo te responde para coordinar una primera conversación.',
+   chips:['Ir al formulario →','¿Cuánto cuesta?','¿Qué servicios ofrecen?'],
+   action:{label:'Ir al formulario →',href:'#contacto'}},
+  {keys:['gracias','perfecto','ok','genial','excelente','entendi','entendí','buenísimo','buenisimo'],
+   reply:'¡Genial! Si surgiera alguna otra pregunta, acá estoy. Y cuando estés listo, el formulario de contacto tarda solo 2 minutos 🚀',
+   chips:['Ir al formulario →','¿Qué servicios ofrecen?','¿Cuánto cuesta?'],
+   action:{label:'Ir al formulario →',href:'#contacto'}}
+];
+const VDEFAULT={reply:'No entendí del todo la pregunta. Puedo ayudarte con info sobre Producciones Void, nuestros servicios, costos o cómo empezar. ¿Qué querés saber?',
+  chips:['¿Qué es Producciones Void?','¿Qué servicios ofrecen?','¿Cuánto cuesta?','Quiero hablar con alguien']};
+const VWELCOME={reply:'¡Hola! Soy Void BOT 👋 Puedo contarte todo sobre Producciones Void y cómo podemos ayudar a tu empresa. ¿Por dónde arrancamos?',
+  chips:['¿Qué es Producciones Void?','¿Qué servicios ofrecen?','¿Cuánto cuesta?','Quiero hablar con alguien']};
+
+let vBotOpen=false,vBotStarted=false;
+function toggleVBot(){
+  vBotOpen=!vBotOpen;
+  const win=document.getElementById('vbot-window');
+  const iO=document.getElementById('vbot-icon-open');
+  const iC=document.getElementById('vbot-icon-close');
+  win.classList.toggle('open',vBotOpen);
+  iO.style.display=vBotOpen?'none':'block';
+  iC.style.display=vBotOpen?'block':'none';
+  if(vBotOpen&&!vBotStarted){vBotStarted=true;setTimeout(()=>vBotSay(VWELCOME.reply,VWELCOME.chips),300);}
+}
+function vBotSay(text,chips,action){
+  const box=document.getElementById('vbot-messages');
+  const msg=document.createElement('div');
+  msg.className='vbot-msg bot';
+  msg.innerHTML=text.replace(/\n/g,'<br>');
+  box.appendChild(msg);box.scrollTop=box.scrollHeight;
+  renderVChips(chips,action);
+}
+function vUserSay(text){
+  const box=document.getElementById('vbot-messages');
+  const msg=document.createElement('div');
+  msg.className='vbot-msg user';
+  msg.textContent=text;
+  box.appendChild(msg);box.scrollTop=box.scrollHeight;
+}
+function renderVChips(chips,action){
+  const c=document.getElementById('vbot-chips');
+  c.innerHTML='';
+  if(!chips)return;
+  chips.forEach(label=>{
+    const btn=document.createElement('button');
+    btn.className='vbot-chip';btn.textContent=label;
+    if(action&&label===action.label){
+      btn.onclick=()=>{
+        if(action.href.startsWith('#')){
+          document.querySelector(action.href)?.scrollIntoView({behavior:'smooth'});
+          toggleVBot();
+        } else { window.location.href=action.href; }
+      };
+    } else {
+      btn.onclick=()=>{vUserSay(label);c.innerHTML='';setTimeout(()=>vProcessInput(label),420);};
+    }
+    c.appendChild(btn);
+  });
+}
+function vProcessInput(text){
+  const lower=text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+  if(lower.includes('formulario')||lower.includes('ir al formulario')){
+    document.querySelector('#contacto')?.scrollIntoView({behavior:'smooth'});
+    toggleVBot();return;
+  }
+  const match=VRESPONSES.find(r=>r.keys.some(k=>lower.includes(k)));
+  const res=match||VDEFAULT;
+  setTimeout(()=>vBotSay(res.reply,res.chips,res.action),320);
+}
+function sendVMsg(){
+  const input=document.getElementById('vbot-input');
+  const text=input.value.trim();
+  if(!text)return;
+  input.value='';
+  document.getElementById('vbot-chips').innerHTML='';
+  vUserSay(text);vProcessInput(text);
+}
+</script>
+
+</body>
+</html>
