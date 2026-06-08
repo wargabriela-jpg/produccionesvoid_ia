@@ -386,6 +386,119 @@
       line-height: 1.7; font-weight: 300;
     }
 
+    /* ── VISUALES / BRANDING ── */
+    #visuales { background: var(--ink); border-top: 1px solid var(--border); position: relative; overflow: hidden; }
+    .vis-grid-bg {
+      position: absolute; inset: 0; pointer-events: none; opacity: .5;
+      background-image:
+        linear-gradient(rgba(200,255,0,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,255,0,.03) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: radial-gradient(ellipse 80% 60% at 70% 40%, #000 0%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 60% at 70% 40%, #000 0%, transparent 75%);
+    }
+    #visuales > * { position: relative; z-index: 1; }
+
+    .vis-layout {
+      display: grid; grid-template-columns: 1.05fr .95fr;
+      gap: 1px; margin-top: 3.5rem;
+      border: 1px solid var(--border); max-width: 1100px;
+      background: var(--border);
+    }
+    /* Panel izquierdo: copy + servicios */
+    .vis-left { background: var(--dark); padding: 2.8rem 2.6rem; }
+    .vis-kicker {
+      font-family: var(--mono); font-size: .58rem;
+      letter-spacing: .28em; text-transform: uppercase;
+      color: var(--acid); display: flex; align-items: center; gap: .6rem;
+      margin-bottom: 1.4rem;
+    }
+    .vis-kicker::before { content: ''; width: 18px; height: 1px; background: var(--acid); }
+    .vis-left h3 {
+      font-family: var(--grotesk); font-weight: 700;
+      font-size: clamp(1.6rem, 3vw, 2.3rem);
+      letter-spacing: -.03em; line-height: 1.05; margin-bottom: 1rem;
+    }
+    .vis-left h3 em { font-style: normal; color: var(--acid); }
+    .vis-left > p {
+      font-size: .9rem; color: var(--muted2); line-height: 1.8;
+      font-weight: 300; max-width: 44ch; margin-bottom: 2rem;
+    }
+    .vis-services { display: flex; flex-direction: column; }
+    .vis-srv {
+      display: flex; gap: 1rem; align-items: flex-start;
+      padding: 1.1rem 0; border-top: 1px solid var(--border);
+      transition: padding-left .25s;
+    }
+    .vis-srv:hover { padding-left: .5rem; }
+    .vis-srv-ico {
+      flex-shrink: 0; width: 30px; height: 30px; margin-top: .1rem;
+      color: var(--acid);
+    }
+    .vis-srv-ico svg { width: 30px; height: 30px; }
+    .vis-srv h5 {
+      font-family: var(--grotesk); font-weight: 600;
+      font-size: .92rem; letter-spacing: -.01em; margin-bottom: .25rem;
+    }
+    .vis-srv p { font-size: .76rem; color: var(--muted2); line-height: 1.6; font-weight: 300; }
+
+    /* Panel derecho: tarjeta marca / link al sitio */
+    .vis-right {
+      background: var(--panel); padding: 2.8rem 2.6rem;
+      display: flex; flex-direction: column; justify-content: space-between;
+      position: relative; overflow: hidden;
+    }
+    .vis-right::before {
+      content: ''; position: absolute; top: -40%; right: -30%;
+      width: 80%; height: 120%;
+      background: radial-gradient(circle, rgba(200,255,0,.10), transparent 60%);
+      pointer-events: none;
+    }
+    .vis-brand-tag {
+      font-family: var(--mono); font-size: .56rem;
+      letter-spacing: .26em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 1.2rem;
+    }
+    .vis-brand-name {
+      font-family: var(--grotesk); font-weight: 700;
+      font-size: clamp(2.2rem, 5vw, 3.1rem); letter-spacing: -.04em;
+      line-height: .95; margin-bottom: .6rem;
+    }
+    .vis-brand-name span { color: var(--acid); }
+    .vis-brand-sub {
+      font-family: var(--mono); font-size: .68rem; color: var(--muted2);
+      letter-spacing: .04em; line-height: 1.7; margin-bottom: 2rem;
+    }
+    .vis-tags { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 2.2rem; }
+    .vis-tag {
+      font-family: var(--mono); font-size: .58rem; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--muted2);
+      padding: .35rem .8rem; border: 1px solid var(--border2);
+      border-radius: 100px; transition: border-color .2s, color .2s;
+    }
+    .vis-tag:hover { border-color: var(--acid); color: var(--acid); }
+    .vis-link {
+      display: inline-flex; align-items: center; gap: .7rem;
+      align-self: flex-start;
+      font-family: var(--mono); font-size: .74rem; font-weight: 500;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: var(--ink); background: var(--acid);
+      padding: .85rem 1.6rem; border-radius: 100px;
+      box-shadow: 0 0 36px rgba(200,255,0,.22);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .vis-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 70px rgba(200,255,0,.45);
+    }
+    .vis-link svg { width: 14px; height: 14px; }
+    .vis-link-note {
+      font-family: var(--mono); font-size: .58rem; letter-spacing: .08em;
+      color: var(--muted); margin-top: 1rem;
+    }
+    .vis-link-note a { color: var(--muted2); border-bottom: 1px solid var(--border2); transition: color .2s, border-color .2s; }
+    .vis-link-note a:hover { color: var(--acid); border-color: var(--acid); }
+
     /* ── PROCESO ── */
     #proceso { background: var(--ink); border-top: 1px solid var(--border); }
     .proceso-grid {
@@ -583,6 +696,7 @@
       .cards-grid .card:nth-child(2n) { border-right: none; }
       .contact-wrap { grid-template-columns: 1fr; gap: 3rem; }
       .proceso-grid { grid-template-columns: 1fr 1fr; }
+      .vis-layout { grid-template-columns: 1fr; }
       .footer-top { flex-direction: column; }
     }
     @media (max-width: 560px) {
@@ -631,6 +745,7 @@
   <div class="header-right">
     <ul class="nav-links-h">
       <li><a href="#servicios">Servicios</a></li>
+      <li><a href="#visuales">Visuales</a></li>
       <li><a href="#proceso">Proceso</a></li>
       <li><a href="#faq">FAQ</a></li>
       <li><a href="#contacto">Contacto</a></li>
@@ -851,6 +966,97 @@
         <p style="max-width:600px;">Creamos sitios web a medida — desde landing pages de alta conversión hasta plataformas completas. Diseño que comunica tu marca, integrado con automatizaciones y estrategia digital desde el primer día.</p>
       </div>
       <a href="#contacto" class="btn-ghost" style="white-space:nowrap;flex-shrink:0;">Consultar →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- VISUALES / BRANDING -->
+<section id="visuales">
+  <div class="vis-grid-bg"></div>
+  <div class="section-tag">— Branding & Experiencias visuales</div>
+  <h2 class="section-title reveal">Diseño que se proyecta<br>sobre lo real.</h2>
+  <p class="section-desc reveal">No solo automatizamos procesos: construimos la identidad visual de tu empresa y la llevamos a la escala física — fachadas, pantallas y eventos.</p>
+
+  <div class="vis-layout reveal">
+
+    <!-- IZQUIERDA: qué hacemos -->
+    <div class="vis-left">
+      <div class="vis-kicker">Diseño para empresa</div>
+      <h3>Marca, motion y <em>video</em> a gran formato.</h3>
+      <p>Desde el sistema visual de tu marca hasta el contenido que se proyecta en muros, escenarios y pantallas LED. Una sola dirección creativa, coherente en cada formato.</p>
+
+      <div class="vis-services">
+        <div class="vis-srv">
+          <div class="vis-srv-ico">
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3">
+              <circle cx="16" cy="16" r="11"/>
+              <path d="M16 5v22M5 16h22"/>
+              <circle cx="16" cy="16" r="3.4" fill="currentColor" stroke="none"/>
+            </svg>
+          </div>
+          <div>
+            <h5>Branding e identidad visual</h5>
+            <p>Logotipo, sistema gráfico y guías de marca pensadas para vivir tanto en digital como en gran formato.</p>
+          </div>
+        </div>
+
+        <div class="vis-srv">
+          <div class="vis-srv-ico">
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3">
+              <rect x="4" y="6" width="24" height="16" rx="1.5"/>
+              <path d="M11 26h10M16 22v4"/>
+              <path d="M9 11l3 2.5L9 16M15 16h6" stroke-width="1.1"/>
+            </svg>
+          </div>
+          <div>
+            <h5>Diseño para pantallas LED</h5>
+            <p>Visuales corporativas y contenido a medida para muros LED en eventos, lanzamientos y espacios comerciales.</p>
+          </div>
+        </div>
+
+        <div class="vis-srv">
+          <div class="vis-srv-ico">
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3">
+              <path d="M4 24V10l9-4 9 4v14"/>
+              <path d="M4 24h18M13 6v18"/>
+              <path d="M25 12l3-1.3v12.6L25 24" fill="currentColor" fill-opacity=".15"/>
+              <path d="M7.5 13.5l3 1.5-3 1.5M7.5 19h4" stroke-width="1"/>
+            </svg>
+          </div>
+          <div>
+            <h5>Video mapping arquitectónico</h5>
+            <p>Proyección que transforma fachadas y estructuras en superficies vivas, sincronizadas con sonido y narrativa.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DERECHA: marca aliada / link -->
+    <div class="vis-right">
+      <div>
+        <div class="vis-brand-tag">Estudio aliado · Santiago, Chile</div>
+        <div class="vis-brand-name">Cimi <span>Uack</span></div>
+        <div class="vis-brand-sub">Videomapping arquitectónico, visuales LED y packs de VJ loops para marcas, arte y música.</div>
+
+        <div class="vis-tags">
+          <span class="vis-tag">Projection mapping</span>
+          <span class="vis-tag">Visuales LED</span>
+          <span class="vis-tag">Motion graphics</span>
+          <span class="vis-tag">VJ loops</span>
+          <span class="vis-tag">Eventos</span>
+        </div>
+      </div>
+
+      <div>
+        <a href="https://www.cimiuack.com" class="vis-link" target="_blank" rel="noopener">
+          Ver el estudio
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 17L17 7M17 7H8M17 7v9"/>
+          </svg>
+        </a>
+        <div class="vis-link-note">Proyectos y demos en <a href="https://www.cimiuack.com" target="_blank" rel="noopener">cimiuack.com</a></div>
+      </div>
     </div>
 
   </div>
@@ -1139,7 +1345,7 @@ document.addEventListener('mousemove', e => {
   ring.style.left = rx+'px'; ring.style.top = ry+'px';
   requestAnimationFrame(animRing);
 })();
-document.querySelectorAll('a,button,.card,.step,.faq-question').forEach(el=>{
+document.querySelectorAll('a,button,.card,.step,.faq-question,.vis-srv,.vis-tag').forEach(el=>{
   el.addEventListener('mouseenter',()=>{cur.style.width='20px';cur.style.height='20px';});
   el.addEventListener('mouseleave',()=>{cur.style.width='10px';cur.style.height='10px';});
 });
